@@ -21,3 +21,12 @@ Database migration is the process of updating a database from one version to ano
 ## Commit 3: TypeScript and Router setup
 
 - Middleware is added to the server to parse incoming requests with JSON payloads.
+
+```text
+Parameter VS Query
+
+Parameters are part of the URL path, while query parameters are part of the URL query string.
+
+Param: /users/:id -> /users/1  req.params.id
+Query: /users?id=1  req.query.id
+```

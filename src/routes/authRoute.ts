@@ -1,7 +1,10 @@
+import { Router } from "express";
 import { prisma } from "../db";
 import { comparePassword, createJWT, hashPassword } from "../module/auth";
 
-export const signup = async (req, res) => {
+const authRouter = Router();
+
+const signup = async (req, res) => {
   const { username, password } = req.body;
   const user = await prisma.user.create({
     data: {
@@ -13,8 +16,9 @@ export const signup = async (req, res) => {
   const token = createJWT(user);
   res.status(200).json({ message: "Signup successful", token });
 };
+authRouter.post("/signup", signup);
 
-export const signin = async (req, res) => {
+const signin = async (req, res) => {
   const { username, password } = req.body;
 
   const user = await prisma.user.findUnique({
@@ -36,3 +40,6 @@ export const signin = async (req, res) => {
   const token = createJWT(user);
   res.status(200).json({ message: "Signin successful", token });
 };
+authRouter.post("/signin", signin);
+
+export default authRouter;

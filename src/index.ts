@@ -3,9 +3,11 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 
-import router from "./router";
+import indexRouter from "./routes/indexRoute";
+import authRouter from "./routes/authRoute";
+import apiRouter from "./routes/apiRoute";
 import { protectedRoute } from "./module/auth";
-import { signin, signup } from "./handlers/user";
+
 const PORT = 3000;
 
 dotenv.config();
@@ -17,12 +19,9 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hey there, Welcome to my API..." });
-});
-app.post("/signup", signup);
-app.post("/signin", signin);
-app.use("/api", protectedRoute, router);
+app.use("/", indexRouter);
+app.use("/auth", authRouter);
+app.use("/api", protectedRoute, apiRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening at http://localhost:${PORT}`);
