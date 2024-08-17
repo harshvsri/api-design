@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../db";
 import { comparePassword, createJWT, hashPassword } from "../module/auth";
+import { uniqueUsername, validateCredential } from "../module/validation";
 
 const authRouter = Router();
 
@@ -16,7 +17,7 @@ const signup = async (req, res) => {
   const token = createJWT(user);
   res.status(200).json({ message: "Signup successful", token });
 };
-authRouter.post("/signup", signup);
+authRouter.post("/signup", validateCredential, uniqueUsername, signup);
 
 const signin = async (req, res) => {
   const { username, password } = req.body;
@@ -40,6 +41,6 @@ const signin = async (req, res) => {
   const token = createJWT(user);
   res.status(200).json({ message: "Signin successful", token });
 };
-authRouter.post("/signin", signin);
+authRouter.post("/signin", validateCredential, signin);
 
 export default authRouter;
